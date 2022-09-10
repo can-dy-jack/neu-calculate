@@ -1,0 +1,69 @@
+/* 新拟态样式风格 */
+#root {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.app {
+  user-select: none;
+  background: #2233dd;
+  box-shadow: 20px 20px 53px #1a27aa, -20px -20px 53px #2a3fff;
+  width: 320px;
+  border-radius: 5px;
+  border: 5px solid #23d;
+  color: white;
+  margin: auto;
+}
+.app .btn-box {
+  display: grid;
+  margin-top: 5px;
+  grid-template-columns: repeat(4, 25%);
+  grid-template-rows: repeat(5, 70px);
+}
+.app .btn-box button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: 0px;
+  background: #e0e0e0;
+  padding: 5px 10px;
+  background-color: #23d;
+  color: white;
+  font-size: 24px;
+  box-sizing: border-box;
+}
+.app .btn-box button:active {
+  box-shadow: inset 5px 5px 16px #1e2cc0, inset -5px -5px 16px #263afa;
+}
+.app .btn-box button:hover {
+  border: 1px solid #55f;
+  background: linear-gradient(145deg, #23d, #1f2ec7);
+}
+.app .btn-box button#clear {
+  grid-column-start: span 2;
+}
+.app .btn-box button#zero {
+  grid-column-start: span 2;
+}
+.app .btn-box button#equals {
+  grid-row-start: span 2;
+}
+.app .btn-box button#subtract, .app .btn-box button#add, .app .btn-box button#equals {
+  border-left: 1px solid #6464f0;
+}
+.app .btn-box button#clear, .app .btn-box button#divide {
+  border-bottom: 1px solid #6464f0;
+}
+.app .show {
+  text-align: right;
+}
+.app .stag-area {
+  font-size: 14px;
+  color: #aaa;
+}
+.app .input-area {
+  font-size: 22px;
+  padding: 5px 0;
+  border-bottom: 1px solid #66f;
+}
