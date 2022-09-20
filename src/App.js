@@ -1,255 +1,164 @@
-import { Component } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-const operat = ['+','-','/','x','0'];
-class Calculator extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      input: '0',
-      stag: '0',
-      operator: '',
-      isCalculated: false,
-      isNegative: false
+
+function CalculatorButton({ val, func, className }) {
+  const calBtn = useRef();
+  useEffect(() => {
+    let circle;
+    calBtn.current.onmousedown = (e) => { 
+      circle = document.createElement("span");
+      circle.classList.add("cal-box-circle");
+      circle.style.left = e.clientX - calBtn.current.offsetLeft + 'px';
+      circle.style.top = e.clientY - calBtn.current.offsetTop + 'px';
+      circle.style.transform = "translate(-50%, -50%)";
+      // circle.style.animation = "";
+      calBtn.current.appendChild(circle);
     }
-    this.getNumber = this.getNumber.bind(this);
-    this.getZero = this.getZero.bind(this);
-    this.getDecimal = this.getDecimal.bind(this);
-    this.clearInput = this.clearInput.bind(this);
-    this.add = this.add.bind(this);
-    this.calculator = this.calculator.bind(this);
-    this.subtract = this.subtract.bind(this);
-    this.divide = this.divide.bind(this);
-    this.multiply = this.multiply.bind(this);
-    
-    this.show =this.show.bind(this);
-  }
-  getNumber(number) {
-    let t;
-    if(operat.includes(this.state.input) || this.state.isCalculated ) {
-      t = number;
-    } else {
-      t = this.state.input + number;
+    calBtn.current.onmouseup = () => {
+      calBtn.current.removeChild(circle);
     }
-    if(this.state.isNegative) {
-      t = '-' + t;
-    }
-    this.setState({
-      input: t,
-      isCalculated: false,
-      isNegative: false
-    })
-  }
-  getZero(){
-    if(operat.includes(this.state.input) || this.state.isCalculated ) {
-      this.setState({
-        input: '0',
-        isCalculated: false
-      })
-    } else {
-      this.setState(state => ({
-        input: state.input + '0',
-        isCalculated: false
-      }))
-    }
-  }
-  getDecimal() {
-    if(this.state.isCalculated) {
-      this.setState({
-        input: '0.',
-        isCalculated: false
-      })
-    } else if(Number.isInteger(+this.state.input) && this.state.input.indexOf('.') === -1) {
-      this.setState(state => ({
-        input: state.input + '.'
-      }))
-    }
-  }
-  clearInput() {
-    // 一切数据都恢复默认值！
-    this.setState({
-      input: '0',
-      stag: '0',
-      operator: '',
-      isCalculated: false,
-      isNegative: false
-    })
-  }
-  add() {
-    if(operat.includes(this.state.input)) {
-      this.setState(state => ({
-        input: '+',
-        stag: state.stag.slice(0,-1) + '+',
-        operator: '+',
-        isNegative: false
-      }))
+  })
+  return <button type='button' className={ 'ccl-btn ' + className} onClick={ func } ref={calBtn}>{val}</button>
+}
+
+function CalculatorInner({ stage, result, input_num, clear, input_zero, add, sub, multi, division, equal }) {
+
+  return (
+    <div className='calculator-grid-box'>
+      <div className='stage'>{ stage }</div>
+      <div className='show'>
+        <span>{ result }</span>
+      </div>
+
+      <CalculatorButton func={ clear } val="AC" className='ac' />
+      <CalculatorButton val="+/-" className='nega' />
+      <CalculatorButton val="%" className='mod' />
+      <CalculatorButton val="÷" className='division' func={division}/>
+
+      <CalculatorButton func={ () => input_num(7) } val="7"/>
+      <CalculatorButton func={ () => input_num(8) } val="8"/>
+      <CalculatorButton func={ () => input_num(9) } val="9"/>
+      <CalculatorButton className="multi" val="x" func={multi}/>
+
+      <CalculatorButton func={ () => input_num(4) } val="4"/>
+      <CalculatorButton func={ () => input_num(5) } val="5"/>
+      <CalculatorButton func={ () => input_num(6) } val="6"/>
+      <CalculatorButton className="sub" val="-" func={sub}/>
+
+      <CalculatorButton func={ () => input_num(1) } val="1"/>
+      <CalculatorButton func={ () => input_num(2) } val="2"/>
+      <CalculatorButton func={ () => input_num(3) } val="3"/>
+      <CalculatorButton className="add" val="+" func={ add }/>
+
+      <CalculatorButton className="zero" val="0" func={ input_zero }/>
+      <CalculatorButton val="."/>
+      <CalculatorButton val="=" className="equal" func={ equal } />
+
+    </div>
+  )
+}
+
+function Calculator() {
+  // status state
+  const [currOperator, setOperator] = useState("");
+  const [isCalculated, setIC] = useState(false);
+  const [left, setLeft] = useState("0");
+  const [right, setRight] = useState("0");
+
+  const [stage, setStage] = useState("");
+  // style state
+
+  const input_num = (num) => {
+    if(typeof num !== 'number') {
+      console.warn("请给数字！(来自 input_num 函数)")
       return;
     }
-    if((this.state.stag.indexOf('+') > -1 || this.state.stag.indexOf('-') > -1 || this.state.stag.indexOf('/') > -1 || this.state.stag.indexOf('x') > -1) && this.state.stag.indexOf('=') === -1) {
-      this.calculator();
-      // this.show();
-      this.setState(state => {
-        return { 
-          input: '+',
-          stag: state.input + '+',
-          operator: '+'
-        }
-      })
+    if(isCalculated) {
+      setLeft(num+'');
+      setRight('');
+      setOperator("");
+      setIC(false);
     } else {
-      this.setState(state => {
-        return { 
-          input: '+',
-          stag: state.input + '+',
-          operator: '+'
+      if(currOperator === "") {
+        if(left === "0") {
+          setLeft(num+'')
+        } else {
+          setLeft(left + '' + num);
         }
-      })
-    }
-  }
-  subtract() {
-    if(operat.includes(this.state.input)) {
-      this.setState(state => ({
-        isNegative: !state.isNegative
-      }))
-      // console.log(this.state.isNegative)
-      return;
-    }
-   if((this.state.stag.indexOf('+') > -1 || this.state.stag.indexOf('-') > -1 || this.state.stag.indexOf('/') > -1 || this.state.stag.indexOf('x') > -1) && this.state.stag.indexOf('=') === -1) {
-      this.calculator();
-    }
-    this.setState(state => {
-      return { 
-        input: '-',
-        stag: state.input + '-',
-        operator: '-'
+      } else {
+        if(right === "0") {
+          setRight(num+'')
+        } else {
+          setRight(right+ '' + num);
+        }
       }
-    })
+    }
   }
-  divide() {
-    if(operat.includes(this.state.input)) {
-      this.setState(state => ({
-        input: '/',
-        stag: state.stag.slice(0,-1) + '/',
-        operator: '/',
-        isNegative: false
-      }))
-      return;
-    }
-    if((this.state.stag.indexOf('+') > -1 || this.state.stag.indexOf('-') > -1 || this.state.stag.indexOf('/') > -1 || this.state.stag.indexOf('x') > -1) && this.state.stag.indexOf('=') === -1) {
-      this.calculator();
-    }
-    this.setState(state => {
-      return {
-        input: '/',
-        stag: state.input + '/',
-        operator: '/'
-      }
-    })
+  const input_zero = () => {
   }
-  multiply() {
-    if(operat.includes(this.state.input)) {
-      this.setState(state => ({
-        input: 'x',
-        stag: state.stag.slice(0,-1) + 'x',
-        operator: '*',
-        isNegative: false
-      }))
-      return;
-    }
-    if((this.state.stag.indexOf('+') > -1 || this.state.stag.indexOf('-') > -1 || this.state.stag.indexOf('/') > -1 || this.state.stag.indexOf('x') > -1) && this.state.stag.indexOf('=') === -1) {
-      this.calculator();
-    }
-    this.setState(state => {
-      return {
-        input: 'x',
-        stag: state.input + 'x',
-        operator: '*'
-      }
-    })
+  const clear = () => {
+    setOperator("");
+    setIC(false);
+    setLeft("0");
+    setRight("");
+    setStage("");
   }
-  calculator() {
-    let num1,num2;
-    if(Number.isInteger(this.state.input) && this.state.stag.indexOf('.') === -1 ) {
-      num2 = parseInt(this.state.input);
-      num1 = parseInt(this.state.stag);
-    } else {
-      num2 = parseFloat(this.state.input);
-      num1 = parseFloat(this.state.stag);
-    }
-    
-    switch(this.state.operator) {
-      case '+': this.setState(state => {
-        return {
-          input: num1 + num2,
-          stag: state.stag + state.input + '=' + (num1 + num2),
-          isCalculated: true
-        }
-      });
+  // FIXME
+  const normalOperation = text => {
+    setOperator(text);
+    setStage(left + text);
+    setRight("0");
+  }
+  const add = () => normalOperation("+");
+  const sub = () => normalOperation("-");
+  const multi = () => normalOperation("*");
+  const division = () => normalOperation("/");
+
+  // TODO
+  const equal = () => {
+    let res;
+    switch(currOperator) {
+      case "+": 
+        res = parseInt(left) + parseInt(right);
         break;
-      case '-': this.setState(state => {
-        return {
-          input: num1 - num2,
-          stag: state.stag + state.input + '=' + (num1 - num2),
-          isCalculated: true
-        }
-      });
+      case "-":
+        res = parseInt(left) - parseInt(right);
         break;
-      case '/': this.setState(state => {
-        const ans = num1 / num2;
-        return {
-          input: ans,
-          stag: state.stag + state.input + '=' + ans,
-          isCalculated: true
-        }
-      });
+      case "*":
+        res = parseInt(left) * parseInt(right);
         break;
-      case '*': this.setState(state => {
-        const ans = num1 * num2;
-        return {
-          input: ans,
-          stag: state.stag + state.input + '=' + ans,
-          isCalculated: true
-        }
-      });
+      case "/":
+        res = parseInt(left) / parseInt(right);
         break;
-      default: break;
+      default: console.warn("未定义的运算符");
     }
+    setOperator("");
+    setStage(stage + right);
+    setLeft(res);
+    setRight("0");
+    setIC(true);
+    console.log("===");
   }
-  show() {
-    console.log(this.state.input)
-    console.log(this.state.stag)
-    console.log(this.state.operator)
-    console.log(this.state.isCalculated)
-  }
-  render() {
-    return (
-      <div className="app">
-        <div className="stag-area show">{ this.state.stag }</div>
-        <div className="input-area show" id="display">{ this.state.input }</div>
-        <div className="btn-box">
-          <button id="clear" onClick={ this.clearInput }>AC</button>
-          <button id="divide" onClick={ this.divide }>/</button>
-          <button id="multiply" onClick={ this.multiply }>x</button>
-          
-          <button id="seven" onClick={ ()=> this.getNumber('7') }>7</button>
-          <button id="eight" onClick={ ()=> this.getNumber('8') }>8</button>
-          <button id="nine" onClick={ ()=> this.getNumber('9') }>9</button>
-          <button id="subtract" onClick= { this.subtract }>-</button>
-          
-          <button id="four" onClick={ ()=> this.getNumber('4') }>4</button>
-          <button id="five" onClick={ ()=> this.getNumber('5') }>5</button>
-          <button id="six" onClick={ ()=> this.getNumber('6') }>6</button>
-          <button id="add" onClick= { this.add }>+</button>
-          
-          <button id="one" onClick={ ()=> this.getNumber('1') }>1</button>
-          <button id="two" onClick={ ()=> this.getNumber('2') }>2</button>
-          <button id="three" onClick={ ()=> this.getNumber('3') }>3</button>
-          <button id="equals" onClick= { this.calculator }>=</button>
-          
-          <button id="zero" onClick={ this.getZero }>0</button>
-          <button id="decimal" onClick={ this.getDecimal }>.</button>
+
+  return(
+    <>
+      <div className='calculator-container' id="calculator-container">
+        <div className='calculator-inner-box'>
+          <CalculatorInner 
+            clear={clear} 
+            input_num={ input_num } 
+            stage={stage} 
+            result={currOperator === "" ? left : right}
+            input_zero={input_zero} 
+            add={add}
+            sub={sub}
+            division={division}
+            multi={multi}
+            equal={equal} />
         </div>
       </div>
-    )
-  }
+    </>
+  )
 }
 export default Calculator;
