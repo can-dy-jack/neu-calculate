@@ -9,7 +9,6 @@
     background-color: var(--main-color);
     box-shadow: 0 0 3px #fff;
     user-select: none;
-    /* background: linear-gradient(145deg, #2cbcff, #259ed6); */
     position: relative;
     overflow: hidden;
     z-index: 2;

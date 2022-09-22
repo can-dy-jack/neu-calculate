@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Alert from "./component/Alert";
 import CalculatorButton from "./component/CalculatorButton";
 import "./App.css";
@@ -10,6 +10,46 @@ function CalculatorInner({
   clear,
   funcs
 }) {
+  useEffect(() => {
+    // 监听键盘
+    window.onkeydown = (e) => {
+      const type = e.code;
+      // console.log(type, e.shiftKey)
+      if(e.shiftKey && type === "Digit5") { // shift + 5 => %
+        funcs.percent();
+        return;
+      }
+      if(type.indexOf("Digit") > -1) { // 0-9
+        input_num(+type[type.length-1])
+      }
+      if(type === 'Period') { // .
+        funcs.point();
+      }
+      if(type === "NumpadAdd") { // +
+        funcs.add();
+      }
+      if(type === "NumpadSubtract") { // -
+        funcs.sub();
+      }
+      if(type === "Minus"){ // -
+        funcs.nega();
+      }
+
+      if(type === "NumpadMultiply") { // x
+        funcs.multi();
+      }
+      if(type === "NumpadDivide") { // /
+        funcs.division();
+      }
+      if(type === "Equal") { // =
+        funcs.equal();
+      }
+      if(type === "Backspace") { // Backspace
+        clear();
+      }
+    };
+  })
+
   return (
     <div className="calculator-grid-box">
       <div className="stage">{stage}</div>
