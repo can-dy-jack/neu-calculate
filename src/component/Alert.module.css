@@ -1,0 +1,21 @@
+.alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 1rem;
+}
+.alertContent {
+    width: clamp(200px, 17rem, 500px);
+    background-color: var(--main-color);
+    height: 26px;
+    margin: 20px auto;
+    line-height: 26px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 14px 14px 38px #2396ca, -10px -10px 20px #2fcaff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

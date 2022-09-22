@@ -20,41 +20,8 @@
     display: grid;
     grid-template-columns: repeat(4, 60px);
     grid-template-rows: 20px 50px repeat(5, 60px);
+    grid-gap: 10px; 
     gap: 10px;
-}
-.ccl-btn {
-    outline: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 30px;
-    font-weight: 400;
-    font-size: 24px;
-    color: #fff;
-    background-color: var(--main-color);
-    box-shadow: 0 0 3px #fff;
-    user-select: none;
-    /* background: linear-gradient(145deg, #2cbcff, #259ed6); */
-    position: relative;
-    overflow: hidden;
-    z-index: 2;
-}
-.cal-box-circle {
-    background-color: rgba(0, 0, 0, .1);
-    position: absolute;
-    animation: circleIN 0.4s ease-out forwards;
-    transform-origin: right top;
-    border-radius: 50%;
-    z-index: -1;
-}
-@keyframes circleIN {
-    from {
-        height: 0;
-        width: 0;
-    }
-    to {
-        height: 240px;
-        width: 240px;
-    }
 }
 .stage,
 .show  {
@@ -67,16 +34,34 @@
 .show {
     font-size: 45px;
 }
+.show::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+.show::-webkit-scrollbar-thumb {
+    height: 6px;
+    background-color: rgba(0, 0, 0, .3);
+    border-radius: 5px;
+}
+
 .zero {
     grid-column: span 2;
 }
-.division,
-.multi,
-.sub,
-.add,
+.division, .multi,
+.sub, .add,
 .equal {
-    background: rgb(255, 73, 73);
-}
-.ac, .nega, .mod {
     background: rgb(255, 176, 29);
+}
+.ac {
+    background: rgb(250, 68, 68);
+}
+.nega, .percent {
+    background-color: rgb(199, 124, 25);
+}
+
+
+/* ^ alert-box ^ */
+#alert-box aside {
+    transform: translateY(-100%);
+    transition: transform 0.4s cubic-bezier(0, 0, 0.33, 1.21);
 }
