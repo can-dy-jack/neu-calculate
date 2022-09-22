@@ -1,8 +1,9 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import "./calculatorButton.css";
 
 function CalculatorButton({ val, func, className }) {
   const calBtn = useRef();
+
   useEffect(() => {
     let circle;
     calBtn.current.onmousedown = (e) => {
@@ -11,7 +12,6 @@ function CalculatorButton({ val, func, className }) {
       circle.style.left = e.clientX - calBtn.current.offsetLeft + "px";
       circle.style.top = e.clientY - calBtn.current.offsetTop + "px";
       circle.style.transform = "translate(-50%, -50%)";
-      // circle.style.animation = "";
       calBtn.current.appendChild(circle);
     };
     calBtn.current.onmouseup = () => {
@@ -19,16 +19,23 @@ function CalculatorButton({ val, func, className }) {
         calBtn.current.removeChild(circle);
       }
     };
+    // TODO
+    calBtn.current.oncontextmenu = (e) => {
+      e.preventDefault();
+    }
   });
   return (
-    <button
-      type="button"
-      className={"ccl-btn " + className}
-      onClick={func}
-      ref={calBtn}
-    >
-      {val}
-    </button>
+    <>
+      <button
+        type="button"
+        className={"ccl-btn " + className}
+        onClick={func}
+        ref={calBtn}
+      >
+        {val}
+      </button>
+    </>
+    
   );
 }
 export default CalculatorButton;

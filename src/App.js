@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Alert from "./component/Alert";
 import CalculatorButton from "./component/CalculatorButton";
 import "./App.css";
