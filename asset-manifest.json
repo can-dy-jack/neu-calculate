@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/neu-calculate/static/css/main.58e0dc16.css",
-    "main.js": "/neu-calculate/static/js/main.96cc60b3.js",
+    "main.css": "/neu-calculate/static/css/main.e56700c3.css",
+    "main.js": "/neu-calculate/static/js/main.91371e84.js",
     "index.html": "/neu-calculate/index.html",
-    "main.58e0dc16.css.map": "/neu-calculate/static/css/main.58e0dc16.css.map",
-    "main.96cc60b3.js.map": "/neu-calculate/static/js/main.96cc60b3.js.map"
+    "main.e56700c3.css.map": "/neu-calculate/static/css/main.e56700c3.css.map",
+    "main.91371e84.js.map": "/neu-calculate/static/js/main.91371e84.js.map"
   },
   "entrypoints": [
-    "static/css/main.58e0dc16.css",
-    "static/js/main.96cc60b3.js"
+    "static/css/main.e56700c3.css",
+    "static/js/main.91371e84.js"
   ]
 }
