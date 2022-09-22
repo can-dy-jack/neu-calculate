@@ -8,14 +8,7 @@ function CalculatorInner({
   result,
   input_num,
   clear,
-  add,
-  sub,
-  multi,
-  division,
-  percent,
-  equal,
-  nega,
-  point,
+  funcs
 }) {
   return (
     <div className="calculator-grid-box">
@@ -25,28 +18,28 @@ function CalculatorInner({
       </div>
 
       <CalculatorButton func={clear} val="AC" className="ac" />
-      <CalculatorButton val="+/-" className="nega" func={nega} />
-      <CalculatorButton val="%" className="percent" func={percent} />
-      <CalculatorButton val="÷" className="division" func={division} />
+      <CalculatorButton val="+/-" className="nega" func={funcs.nega} />
+      <CalculatorButton val="%" className="percent" func={funcs.percent} />
+      <CalculatorButton val="÷" className="division" func={funcs.division} />
 
       <CalculatorButton func={() => input_num(7)} val="7" />
       <CalculatorButton func={() => input_num(8)} val="8" />
       <CalculatorButton func={() => input_num(9)} val="9" />
-      <CalculatorButton className="multi" val="x" func={multi} />
+      <CalculatorButton className="multi" val="x" func={funcs.multi} />
 
       <CalculatorButton func={() => input_num(4)} val="4" />
       <CalculatorButton func={() => input_num(5)} val="5" />
       <CalculatorButton func={() => input_num(6)} val="6" />
-      <CalculatorButton className="sub" val="-" func={sub} />
+      <CalculatorButton className="sub" val="-" func={funcs.sub} />
 
       <CalculatorButton func={() => input_num(1)} val="1" />
       <CalculatorButton func={() => input_num(2)} val="2" />
       <CalculatorButton func={() => input_num(3)} val="3" />
-      <CalculatorButton className="add" val="+" func={add} />
+      <CalculatorButton className="add" val="+" func={ funcs.add } />
 
       <CalculatorButton className="zero" val="0" func={() => input_num(0)} />
-      <CalculatorButton val="." func={point} />
-      <CalculatorButton val="=" className="equal" func={equal} />
+      <CalculatorButton val="." func={funcs.point} />
+      <CalculatorButton val="=" className="equal" func={funcs.equal} />
     </div>
   );
 }
@@ -216,14 +209,9 @@ function Calculator() {
             input_num={input_num}
             stage={stage}
             result={currOperator === "" ? left : right}
-            add={add}
-            sub={sub}
-            division={division}
-            multi={multi}
-            percent={percent}
-            equal={equal}
-            nega={nega}
-            point={point}
+            funcs = {{
+              add, sub, division, multi, percent, equal, nega, point
+            }}
           />
         </div>
       </div>
