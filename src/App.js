@@ -19,11 +19,12 @@ function CalculatorInner({
         funcs.percent();
         return;
       }
-      if(type.indexOf("Digit") > -1) { // 0-9
-        input_num(+type[type.length-1])
-      }
-      if(type === 'Period') { // .
+      if(type === 'Period' || type === "NumpadDecimal") { // .
         funcs.point();
+        return;
+      }
+      if(type.indexOf("Digit") > -1 || type.indexOf("Numpad") > -1) { // 0-9
+        input_num(+type[type.length-1])
       }
       if(type === "NumpadAdd") { // +
         funcs.add();
