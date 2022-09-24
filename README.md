@@ -1,12 +1,10 @@
-- [x] 可用键盘控制！
-- [x] 按钮右键拦截
 
-- [ ] 高级运算支持
+https://kartjim.cn/neu-calculate
 
 
-配置问题：
+<!-- 配置问题：
 - ico
-- manifest.json
+- manifest.json -->
 
 <!-- 
 ### 提示

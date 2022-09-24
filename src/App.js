@@ -1,89 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import CalculatorInner from "./component/CalculatorInner";
 import Alert from "./component/Alert";
-import CalculatorButton from "./component/CalculatorButton";
 import "./App.css";
-
-function CalculatorInner({
-  stage,
-  result,
-  input_num,
-  clear,
-  funcs
-}) {
-  useEffect(() => {
-    // 监听键盘
-    window.onkeydown = (e) => {
-      const type = e.code;
-      // console.log(type, e.shiftKey)
-      if(e.shiftKey && type === "Digit5") { // shift + 5 => %
-        funcs.percent();
-        return;
-      }
-      if(type === 'Period' || type === "NumpadDecimal") { // .
-        funcs.point();
-        return;
-      }
-      if(type.indexOf("Digit") > -1 || type.indexOf("Numpad") > -1) { // 0-9
-        input_num(+type[type.length-1])
-      }
-      if(type === "NumpadAdd") { // +
-        funcs.add();
-      }
-      if(type === "NumpadSubtract") { // -
-        funcs.sub();
-      }
-      if(type === "Minus"){ // -
-        funcs.nega();
-      }
-
-      if(type === "NumpadMultiply") { // x
-        funcs.multi();
-      }
-      if(type === "NumpadDivide") { // /
-        funcs.division();
-      }
-      if(type === "Equal") { // =
-        funcs.equal();
-      }
-      if(type === "Backspace") { // Backspace
-        clear();
-      }
-    };
-  })
-
-  return (
-    <div className="calculator-grid-box">
-      <div className="stage">{stage}</div>
-      <div className="show">
-        <span>{result}</span>
-      </div>
-
-      <CalculatorButton func={clear} val="AC" className="ac" />
-      <CalculatorButton val="+/-" className="nega" func={funcs.nega} />
-      <CalculatorButton val="%" className="percent" func={funcs.percent} />
-      <CalculatorButton val="÷" className="division" func={funcs.division} />
-
-      <CalculatorButton func={() => input_num(7)} val="7" />
-      <CalculatorButton func={() => input_num(8)} val="8" />
-      <CalculatorButton func={() => input_num(9)} val="9" />
-      <CalculatorButton className="multi" val="x" func={funcs.multi} />
-
-      <CalculatorButton func={() => input_num(4)} val="4" />
-      <CalculatorButton func={() => input_num(5)} val="5" />
-      <CalculatorButton func={() => input_num(6)} val="6" />
-      <CalculatorButton className="sub" val="-" func={funcs.sub} />
-
-      <CalculatorButton func={() => input_num(1)} val="1" />
-      <CalculatorButton func={() => input_num(2)} val="2" />
-      <CalculatorButton func={() => input_num(3)} val="3" />
-      <CalculatorButton className="add" val="+" func={ funcs.add } />
-
-      <CalculatorButton className="zero" val="0" func={() => input_num(0)} />
-      <CalculatorButton val="." func={funcs.point} />
-      <CalculatorButton val="=" className="equal" func={funcs.equal} />
-    </div>
-  );
-}
 
 function Calculator() {
   const [currOperator, setOperator] = useState("");
@@ -206,6 +124,49 @@ function Calculator() {
       setRight(right + ".");
     }
   };
+  const cent2 = () => {
+    if (currOperator === "") {
+      if (left === "0") {
+        showAlert("0不能为分母", "rgb(199, 124, 25)");
+        return;
+      }
+      setLeft(1/parseFloat(left) + "");
+    } else {
+      if (right === "0") {
+        showAlert("0不能为分母", "rgb(199, 124, 25)");
+        return;
+      }
+      setRight(1/parseFloat(right) + "");
+    }
+  }
+  const clearOne = () => {
+    if (currOperator === "") {
+      if (left === "0") {
+        return;
+      }
+      if(left.length === 1) {
+        setLeft("0");
+      } else {
+        setLeft(left.slice(0, left.length-1));
+      }
+    } else {
+      if (right === "0" || right === "") {
+        return;
+      }
+      if(right.length === 1) {
+        setRight("0");
+      } else {
+        setRight(right.slice(0, right.length-1));
+      }
+    }
+  }
+  const square = () => {
+    if (currOperator === "") {
+      setLeft(parseFloat(left)*parseFloat(left) + "");
+    } else {
+      setRight(parseFloat(right)*parseFloat(right) + "");
+    }
+  }
 
   // TODO
   const equal = () => {
@@ -233,7 +194,7 @@ function Calculator() {
     }
     setOperator("");
     setStage(stage + right + "=");
-    setLeft(res);
+    setLeft(res + '');
     setRight("0");
     setIC(true);
   };
@@ -251,7 +212,7 @@ function Calculator() {
             stage={stage}
             result={currOperator === "" ? left : right}
             funcs = {{
-              add, sub, division, multi, percent, equal, nega, point
+              add, sub, division, multi, percent, equal, nega, point, cent2, clearOne, square
             }}
           />
         </div>

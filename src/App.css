@@ -5,7 +5,7 @@
     display: flex;
 }
 .calculator-inner-box {
-    width: 290px;
+    width: 335px;
     height: 450px;
     box-sizing: border-box;
     padding: 10px;
@@ -18,10 +18,12 @@
 }
 .calculator-grid-box {
     display: grid;
-    grid-template-columns: repeat(4, 60px);
-    grid-template-rows: 20px 50px repeat(5, 60px);
-    grid-gap: 10px; 
-    gap: 10px;
+    height: 100%;
+    grid-template-columns: repeat(4, 75px);
+    grid-template-rows: 20px 50px repeat(6, 50px);
+    align-content: end;
+    grid-gap: 5px; 
+    gap: 5px;
 }
 .stage,
 .show  {
@@ -48,14 +50,20 @@
     grid-column: span 2;
 }
 .division, .multi,
-.sub, .add,
+.sub, .add {
+    background: rgb(48, 237, 41);
+}
 .equal {
-    background: rgb(255, 176, 29);
+    background: darkcyan;
 }
-.ac {
-    background: rgb(250, 68, 68);
+.ac, .clear-one {
+    background: rgb(221, 37, 37);
 }
-.nega, .percent {
+.clear-one {
+    font-size: 14px;
+    /* border-radius: 100% 0 0 100%; */
+}
+.nega, .percent, .cent2, .square {
     background-color: rgb(199, 124, 25);
 }
 

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import "./calculatorButton.css";
 
-function CalculatorButton({ val, func, className }) {
+function CalculatorButton({ val, func, className, disabled }) {
   const calBtn = useRef();
 
   useEffect(() => {
@@ -28,9 +28,10 @@ function CalculatorButton({ val, func, className }) {
     <>
       <button
         type="button"
-        className={"ccl-btn " + className}
+        className={className ? "ccl-btn " + className : "ccl-btn"}
         onClick={func}
         ref={calBtn}
+        disabled={disabled}
       >
         {val}
       </button>

@@ -2,21 +2,24 @@
     outline: none;
     border: none;
     cursor: pointer;
-    border-radius: 30px;
+    border-radius: 5px;
     font-weight: 400;
     font-size: 24px;
     color: #fff;
     background-color: var(--main-color);
-    box-shadow: 0 0 3px #fff;
+    box-shadow: 0 0 2px rgb(4, 122, 151),
+        1px 1px 1px rgba(0,0,0,.1);
     user-select: none;
     position: relative;
     overflow: hidden;
     z-index: 2;
+
+    font-family: Cambria;
 }
 .cal-box-circle {
     background-color: rgba(0, 0, 0, .1);
     position: absolute;
-    animation: circleIN 0.5s ease-out forwards;
+    animation: circleIN 0.8s ease-out forwards;
     transform-origin: right top;
     border-radius: 50%;
     z-index: -1;
@@ -27,8 +30,8 @@
         width: 0;
     }
     to {
-        height: 200px;
-        width: 200px;
+        height: 280px;
+        width: 280px;
     }
 }
 .right-menu {
