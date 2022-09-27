@@ -2,6 +2,10 @@
 https://kartjim.cn/neu-calculate
 
 
+- [ ] TypeScript
+- [ ] Redux
+- [ ] Jest test
+
 <!-- 配置问题：
 - ico
 - manifest.json -->
