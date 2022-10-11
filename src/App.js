@@ -1,14 +1,17 @@
 import React, { useState, useRef } from "react";
 import CalculatorInner from "./component/CalculatorInner";
 import Alert from "./component/Alert";
+import useSetState from "./hooks/useSetSate";
 import "./App.css";
 
 function Calculator() {
-  const [currOperator, setOperator] = useState("");
-  const [isCalculated, setIC] = useState(false);
-  const [left, setLeft] = useState("0");
-  const [right, setRight] = useState("0");
-  const [stage, setStage] = useState("");
+  const [state, setState] = useSetState({
+    currOperator: "",
+    isCalculated: false,
+    left: "0",
+    right: "0",
+    stage: "",
+  });
 
   const [alertStyle, setAlertStyles] = useState([
     "出现错误",
@@ -34,169 +37,210 @@ function Calculator() {
       showAlert("请给数字！(来自 input_num 函数)", "#22ef12");
       return;
     }
-    if (isCalculated) {
-      setLeft(num + "");
-      setRight("");
-      setOperator("");
-      setIC(false);
+    if (state.isCalculated) {
+      setState({
+        left: num + "",
+        right: "",
+        currOperator: "",
+        isCalculated: false,
+      });
     } else {
-      if (currOperator === "") {
-        if (left === "0") {
-          setLeft(num + "");
+      if (state.currOperator === "") {
+        if (state.left === "0") {
+          setState({
+            left: num + "",
+          });
         } else {
-          setLeft(left + "" + num);
+          setState({
+            left: state.left + "" + num,
+          });
         }
       } else {
-        if (right === "0") {
-          setRight(num + "");
+        if (state.right === "0") {
+          setState({
+            right: num + "",
+          });
         } else {
-          setRight(right + "" + num);
+          setState({
+            right: state.right + "" + num,
+          });
         }
       }
     }
   };
   const clear = () => {
-    setOperator("");
-    setIC(false);
-    setLeft("0");
-    setRight("");
-    setStage("");
+    setState({
+      currOperator: "",
+      isCalculated: false,
+      left: "0",
+      right: "",
+      stage: "",
+    });
   };
   const normalOperation = (type, text) => {
     if (text === undefined) {
       text = type;
     }
-    setOperator(type);
-    setStage(left + text);
-    setRight("0");
+    setState({
+      currOperator: type,
+      stage: state.left + text,
+      right: "0",
+      isCalculated: false,
+    });
+    // FIXME
     // 如果是刚计算完，就接着上一次的结果来计算；
     // 避免按下一个数的时候清除该结果
-    if (isCalculated) {
-      setIC(false);
-    }
+    // if (isCalculated) {
+    //   setIC(false);
+    // }
   };
   const add = () => normalOperation("+"),
     sub = () => normalOperation("-"),
     multi = () => normalOperation("*", "x"),
     division = () => normalOperation("/", "÷");
   const percent = () => {
-    if (currOperator === "") {
-      if (left === "0") {
+    if (state.currOperator === "") {
+      if (state.left === "0") {
         showAlert("0% = 0 !!!", "#fff");
         return;
       }
-      setLeft(parseFloat(left) / 100 + "");
+      setState({
+        left: parseFloat(state.left) / 100 + "",
+      });
     } else {
-      if (right === "0") {
+      if (state.right === "0") {
         showAlert("0% = 0 !!!", "#fff");
         return;
       }
-      setRight(parseFloat(right) / 100 + "");
+      setState({
+        right: parseFloat(state.right) / 100 + "",
+      });
     }
   };
   const nega = () => {
-    if (currOperator === "") {
-      if (left === "0") {
+    if (state.currOperator === "") {
+      if (state.left === "0") {
         showAlert("-0 === +0", "#fff");
         return;
       }
-      setLeft(parseFloat(left) > 0 ? "-" + left : left.substring(1));
+      setState({
+        left:
+          parseFloat(state.left) > 0
+            ? "-" + state.left
+            : state.left.substring(1),
+      });
     } else {
-      if (right === "0") {
+      if (state.right === "0") {
         showAlert("-0 === +0", "#fff");
         return;
       }
-      setRight(parseFloat(right) > 0 ? "-" + right : right.substring(1));
+      setState({
+        right:
+          parseFloat(state.right) > 0
+            ? "-" + state.right
+            : state.right.substring(1),
+      });
     }
   };
   const point = () => {
-    if (currOperator === "") {
-      if (~left.indexOf(".")) {
+    if (state.currOperator === "") {
+      if (~state.left.indexOf(".")) {
         showAlert("已是小数！", "#f0f");
         return;
       }
-      setLeft(left + ".");
+      setState({
+        left: state.left + ".",
+      });
     } else {
-      if (~right.indexOf(".")) {
+      if (~state.right.indexOf(".")) {
         showAlert("已是小数！", "#f0f");
         return;
       }
-      setRight(right + ".");
+      setState({
+        right: state.right + ".",
+      });
     }
   };
   const cent2 = () => {
-    if (currOperator === "") {
-      if (left === "0") {
+    if (state.currOperator === "") {
+      if (state.left === "0") {
         showAlert("0不能为分母", "rgb(199, 124, 25)");
         return;
       }
-      setLeft(1/parseFloat(left) + "");
+      setState({
+        left: 1 / parseFloat(state.left) + "",
+      });
     } else {
-      if (right === "0") {
+      if (state.right === "0") {
         showAlert("0不能为分母", "rgb(199, 124, 25)");
         return;
       }
-      setRight(1/parseFloat(right) + "");
+      setState({
+        right: 1 / parseFloat(state.right) + "",
+      });
     }
-  }
+  };
   const clearOne = () => {
-    if (currOperator === "") {
-      if (left === "0") {
+    if (state.currOperator === "") {
+      if (state.left === "0") {
         return;
       }
-      if(left.length === 1) {
-        setLeft("0");
+      if (state.left.length === 1) {
+        setState({ left: "0" });
       } else {
-        setLeft(left.slice(0, left.length-1));
+        setState({ left: state.left.slice(0, state.left.length - 1) });
       }
     } else {
-      if (right === "0" || right === "") {
+      if (state.right === "0" || state.right === "") {
         return;
       }
-      if(right.length === 1) {
-        setRight("0");
+      if (state.right.length === 1) {
+        setState({ right: "0" });
       } else {
-        setRight(right.slice(0, right.length-1));
+        setState({ right: state.right.slice(0, state.right.length - 1) });
       }
     }
-  }
+  };
   const square = () => {
-    if (currOperator === "") {
-      setLeft(parseFloat(left)*parseFloat(left) + "");
+    if (state.currOperator === "") {
+      setState({ left: parseFloat(state.left) * parseFloat(state.left) + "" });
     } else {
-      setRight(parseFloat(right)*parseFloat(right) + "");
+      setState({
+        right: parseFloat(state.right) * parseFloat(state.right) + "",
+      });
     }
-  }
+  };
 
-  // TODO
   const equal = () => {
     let res;
-    switch (currOperator) {
+    switch (state.currOperator) {
       case "+":
-        res = parseFloat(left) + parseFloat(right);
+        res = parseFloat(state.left) + parseFloat(state.right);
         break;
       case "-":
-        res = parseFloat(left) - parseFloat(right);
+        res = parseFloat(state.left) - parseFloat(state.right);
         break;
       case "*":
-        res = parseFloat(left) * parseFloat(right);
+        res = parseFloat(state.left) * parseFloat(state.right);
         break;
       case "/":
-        if (right === "0") {
+        if (state.right === "0") {
           showAlert("除数不能为零！", "rgb(250, 3, 5)");
           return;
         }
-        res = parseInt(left) / parseInt(right);
+        res = parseInt(state.left) / parseInt(state.right);
         break;
       default:
         showAlert("未定义的运算符！", "#ab2632");
         return;
     }
-    setOperator("");
-    setStage(stage + right + "=");
-    setLeft(res + '');
-    setRight("0");
-    setIC(true);
+    setState({
+      currOperator: "",
+      left: res + "",
+      right: "0",
+      isCalculated: true,
+      stage: state.stage + state.right + "=",
+    });
   };
 
   return (
@@ -209,10 +253,20 @@ function Calculator() {
           <CalculatorInner
             clear={clear}
             input_num={input_num}
-            stage={stage}
-            result={currOperator === "" ? left : right}
-            funcs = {{
-              add, sub, division, multi, percent, equal, nega, point, cent2, clearOne, square
+            stage={state.stage}
+            result={state.currOperator === "" ? state.left : state.right}
+            funcs={{
+              add,
+              sub,
+              division,
+              multi,
+              percent,
+              equal,
+              nega,
+              point,
+              cent2,
+              clearOne,
+              square,
             }}
           />
         </div>

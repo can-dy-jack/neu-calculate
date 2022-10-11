@@ -6,7 +6,7 @@ function CalculatorInner({ stage, result, input_num, clear, funcs }) {
     // 监听键盘
     window.onkeydown = (e) => {
       const type = e.code;
-      console.log(type, e.shiftKey)
+      // console.log(type, e.shiftKey)
       if (e.shiftKey && type === "Digit5") {
         // shift + 5 => %
         funcs.percent();
